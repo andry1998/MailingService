@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+import "proto/shared/uuid.proto";
+
+option java_package = "ru.mgt.icp.notificationmanagement.contract.proto";
+option java_outer_classname = "SendingServiceProto";
+option java_multiple_files = true;
+
+
+service SendingService{
+  rpc send(SendingNotificationRequest) returns (SendingNotificationResponse);
+}
+
+message SendingNotificationRequest{
+  Template template = 1;
+
+  repeated string tabIds = 2;
+  repeated Uuid groupIds = 3;
+  map<string, string> arguments = 4;
+
+
+  message Template{
+
+    string sms = 1;
+    PushTemplate push = 2;
+    EmailTemplate email = 3;
+
+    message PushTemplate{
+      string title = 1;
+      string text = 2;
+    }
+
+    message EmailTemplate{
+      string subject = 1;
+      string message = 2;
+      repeated Uuid files = 3;
+    }
+  }
+}
+
+message SendingNotificationResponse{
+  bool accept = 1;
+}
